@@ -28,8 +28,8 @@ class CreateTodoRequest(BaseModel):
     todo: TodoItem
 
 class TodoListRequest(BaseModel):
-    is_completed: bool
-    priority: str
+    is_completed: Optional[bool] = None
+    priority: Optional[str] = None
     
 class TodoRequest(BaseModel):
     id: int

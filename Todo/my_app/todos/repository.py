@@ -3,7 +3,7 @@ import logging
 from datetime import date
 from todos.models import Todo
 from sqlalchemy.orm import Session
-from todos.schemas import CreateTodoRequest, UpdateTodoRequest, TodoListResponse
+from todos.schemas import CreateTodoRequest, UpdateTodoRequest, TodoListRequest, TodoListResponse
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -13,8 +13,13 @@ class TodoRepository:
         self.db = db
 
     # Todo 목록 조회
-    def get_todo_list(self) -> TodoListResponse:
-        return self.db.query(Todo).all()
+    def get_todo_list(self, request: TodoListRequest) -> TodoListResponse:
+        if request is None:
+            return self.db.query(Todo).filter().all() # 전체반환
+        elif request is not None:
+            filter_data = self.db.query(Todo).filter(request.is_completed == Todo.is_completed,request.priority == Todo.priority).all()
+            if filter_data is None:
+                return self.db.query(Todo).filter().all() # 전체반환
 
     # Todo 단건 조회
     def get_todo(self, todo_id: int) -> Todo | None:
