@@ -2,7 +2,7 @@ import logging
 from fastapi import HTTPException
 from todos.repository import TodoRepository
 from todos.models import Todo
-from todos.schemas import CreateTodoRequest, UpdateTodoRequest
+from todos.schemas import CreateTodoRequest, UpdateTodoRequest, TodoListResponse
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -14,9 +14,7 @@ class TodoService:
 
     def get_all_todos(self) -> list[Todo]:
         todo_list = self.repository.get_todo_list()
-        if todo_list is None:
-            raise HTTPException(status_code=404, detail=f"Todo 리스트가 존재하지 않습니다.")
-        return todo_list
+        return TodoListResponse(todolist=todo_list)
     
     def get_todo(self, todo_id: int) -> Todo:
         todo = self.repository.get_todo(todo_id)
