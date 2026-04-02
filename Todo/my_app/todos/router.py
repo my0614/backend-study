@@ -20,6 +20,11 @@ def get_todo(todo_id: int, service: TodoService = Depends(get_todo_service)):
 def create_todo(request: CreateTodoRequest, service: TodoService = Depends(get_todo_service)):
     return service.create_todo(request)
 
+#PATCH todos/{todo_id}
+@router.patch("/{todo_id}")
+def update_todo(todo_id: int, request: CreateTodoRequest, service: TodoService = Depends(get_todo_service)):
+    service.update_todo(todo_id, request)
+
 #DELETE /todos/{todo_id}
 @router.delete("/{todo_id}", status_code=204)
 def delete_todo(todo_id: int, service: TodoService = Depends(get_todo_service)):

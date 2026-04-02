@@ -16,6 +16,7 @@ class TodoRepository:
     def get_todo(self, todo_id: int) -> Todo | None:
         return self.db.query(Todo).filter(Todo.id == todo_id).first()
 
+    # Todo 저장
     def save_todo(self, request: CreateTodoRequest) -> Todo:
         todo = Todo(title=request.title, description=request.description,  priority=request.priority,due_date=date.fromisoformat(request.due_date))                                                                                                                                                                                                                                                                                                                                   
         self.db.add(todo)       # INSERT 준비
@@ -23,6 +24,14 @@ class TodoRepository:
         self.db.refresh(todo)   # id 등 DB 생성 값 갱신
         return todo
 
+    # Todo 수정
+    def update_todo(self, todo_id: int, request: CreateTodoRequest) -> Todo | None:
+        todo = self.db.query(Todo).filter(Todo.id == todo_id).first()
+        if todo:
+            self.db.update(todo)
+            self.db.commit()
+            return todo
+    
     # Todo 삭제
     def delete_todo(self, todo_id: int) -> None:
         todo = self.db.query(Todo).filter(Todo.id == todo_id).first()
