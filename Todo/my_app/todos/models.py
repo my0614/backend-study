@@ -10,5 +10,5 @@ class Todo(Base):
     is_completed = Column(Boolean, default=False)
     priority = Column(String, default='medium')
     due_date = Column(Date, nullable=True)
-    created_at = Column(DateTime, default=datetime.now)
+    created_at = Column(DateTime, default=datetime.now())
     

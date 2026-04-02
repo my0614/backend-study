@@ -11,6 +11,11 @@ router = APIRouter(prefix="/todos", tags=["todos"])
 def get_all_todo(request: TodoListRequest = Depends(), service: TodoService = Depends(get_todo_service)):
     return service.get_all_todos(request)
 
+#GET /todos/overdue
+@router.get("/overdue")
+def overdue_todo(service: TodoService = Depends(get_todo_service)):
+    return service.get_overdue_todo()
+    
 #GET /todos/{todo_id}
 @router.get("/{todo_id}", response_model=TodoItem)
 def get_todo(todo_id: int, service: TodoService = Depends(get_todo_service)):

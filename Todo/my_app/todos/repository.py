@@ -1,6 +1,7 @@
 # todos/repository.py
 import logging
 from datetime import date
+from datetime import datetime
 from todos.models import Todo
 from sqlalchemy.orm import Session
 from todos.schemas import UpdateTodoRequest, TodoListRequest, TodoItem, TodoList
@@ -55,3 +56,8 @@ class TodoRepository:
             return True
         
         return False
+    
+    # Overdue Todo 목록 조회
+    def get_overdue_todo(self) -> TodoList:                                                                                                                   
+        query = self.db.query(Todo).filter(Todo.is_completed == False, Todo.due_date < datetime.now())                                                                                                                                                                                                            
+        return query.order_by(Todo.due_date).all() 

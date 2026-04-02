@@ -36,3 +36,9 @@ class TodoService:
         status = self.repository.delete_todo(todo_id)
         if status == False:
             raise HTTPException(status_code=404, detail=f"존재하지 않습니다. id: {todo_id}")
+    
+    def get_overdue_todo(self) -> TodoList:
+        todo = self.repository.get_overdue_todo()
+        if todo is None:
+            raise HTTPException(status_code=404, detail=f"존재하지 않습니다.")
+        return TodoList(todolist=todo)
