@@ -16,9 +16,9 @@ class TodoRepository:
     def get_todo_list(self, request: TodoListRequest) -> TodoList:                                                                                                                   
       query = self.db.query(Todo)                                                        
       if request.is_completed is not None:
-          query = query.filter(Todo.is_completed == request.is_completed).order_by(Todo.due_date)                                                                                                                                     
+          query = query.filter(Todo.is_completed == request.is_completed).order_by(request.due_date)                                                                                                                                     
       if request.priority is not None:                                   
-          query = query.filter(Todo.priority == request.priority).order_by(Todo.due_date)                                                                                                                                                  
+          query = query.filter(Todo.priority == request.priority).order_by(request.due_date)                                                                                                                                                  
       return query.all()    
 
     # Todo 단건 조회
@@ -27,7 +27,7 @@ class TodoRepository:
 
     # Todo 저장
     def save_todo(self, request: TodoItem) -> Todo:
-        todo = Todo(title=request.title, description=request.description, priority=request.priority, due_date=date.fromisoformat(request.due_date))                                                                                                                                                                                                                                                                                                                                   
+        todo = Todo(title=request.title, description=request.description, priority=request.priority, due_date=request.due_date)                                                                                                                                                                                                                                                                                                                                   
         self.db.add(todo)     
         self.db.commit()
         self.db.refresh(todo) # id 등 DB 생성 값 갱신
