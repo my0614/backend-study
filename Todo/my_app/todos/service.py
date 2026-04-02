@@ -12,8 +12,8 @@ class TodoService:
     def __init__(self, repository: TodoRepository):
         self.repository = repository
 
-    def get_all_todos(self, request: TodoListRequest) -> TodoListResponse:
-        todo_list = self.repository.get_todo_list()
+    def get_all_todos(self, is_completed: bool | None, priority: str | None) -> TodoListResponse:
+        todo_list = self.repository.get_todo_list(is_completed,priority)
         return TodoListResponse(todolist=todo_list)
     
     def get_todo(self, todo_id: int) -> Todo:

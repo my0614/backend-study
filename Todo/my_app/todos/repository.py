@@ -13,13 +13,13 @@ class TodoRepository:
         self.db = db
 
     # Todo 목록 조회
-    def get_todo_list(self, request: TodoListRequest) -> TodoListResponse:
-        if request is None:
-            return self.db.query(Todo).filter().all() # 전체반환
-        elif request is not None:
-            filter_data = self.db.query(Todo).filter(request.is_completed == Todo.is_completed,request.priority == Todo.priority).all()
-            if filter_data is None:
-                return self.db.query(Todo).filter().all() # 전체반환
+    def get_todo_list(self, is_completed: bool | None, priority: str | None) -> TodoListResponse:                                                                                                                   
+      query = self.db.query(Todo)                                                        
+      if is_completed is not None:
+          query = query.filter(Todo.is_completed == is_completed)                                                                                                                                           
+      if priority is not None:                                   
+          query = query.filter(Todo.priority == priority)                                                                                                                                                   
+      return query.all()    
 
     # Todo 단건 조회
     def get_todo(self, todo_id: int) -> Todo | None:

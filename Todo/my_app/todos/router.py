@@ -13,7 +13,7 @@ def get_all_todo(
       priority: str | None = Query(default=None),                                                                                                                                                           
       service: TodoService = Depends(get_todo_service)                                                                                                                                                      
   ):
-    return service.get_all_todos()
+    return service.get_all_todos(is_completed,priority)
 
 #GET /todos/{todo_id}
 @router.get("/{todo_id}", response_model=TodoResponse)
