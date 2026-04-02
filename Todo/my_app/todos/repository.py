@@ -16,10 +16,10 @@ class TodoRepository:
     def get_todo_list(self, request: TodoListRequest) -> TodoList:                                                                                                                   
       query = self.db.query(Todo)                                                        
       if request.is_completed is not None:
-          query = query.filter(Todo.is_completed == request.is_completed).order_by(request.due_date)                                                                                                                                     
+          query = query.filter(Todo.is_completed == request.is_completed)                                                                                                                                    
       if request.priority is not None:                                   
-          query = query.filter(Todo.priority == request.priority).order_by(request.due_date)                                                                                                                                                  
-      return query.all()    
+          query = query.filter(Todo.priority == request.priority)                                                                                                                                               
+      return query.order_by(Todo.due_date).all() 
 
     # Todo 단건 조회
     def get_todo(self, todo_id: int) -> Todo | None:
