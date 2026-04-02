@@ -27,6 +27,10 @@ class PriorityEnum(str, Enum):
 class CreateTodoRequest(BaseModel):
     todo: TodoItem
 
+class TodoListRequest(BaseModel):
+    is_completed: bool
+    priority: str
+    
 class TodoRequest(BaseModel):
     id: int
 

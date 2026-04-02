@@ -2,7 +2,7 @@ import logging
 from fastapi import HTTPException
 from todos.repository import TodoRepository
 from todos.models import Todo
-from todos.schemas import CreateTodoRequest, UpdateTodoRequest, TodoListResponse
+from todos.schemas import CreateTodoRequest, UpdateTodoRequest, TodoListResponse, TodoListRequest
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -12,7 +12,7 @@ class TodoService:
     def __init__(self, repository: TodoRepository):
         self.repository = repository
 
-    def get_all_todos(self) -> list[Todo]:
+    def get_all_todos(self, request: TodoListRequest) -> TodoListResponse:
         todo_list = self.repository.get_todo_list()
         return TodoListResponse(todolist=todo_list)
     
