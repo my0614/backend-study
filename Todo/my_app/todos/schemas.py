@@ -18,9 +18,6 @@ class UpdateTodoRequest(BaseModel):
     is_completed: Optional[bool] = None
     priority: Optional[str] = None
 
-class DeleteTodoRequest(BaseModel):
-    id: int
-
 class CreateTodoResponse(BaseModel):
     title: str
     description: str
@@ -43,7 +40,7 @@ class UpdateTodoResponse(BaseModel):
     title: Optional[str] = None
     description: Optional[str] = None
     is_completed: Optional[bool] = None
-    priority: Optional[str] = None
+    priority: Optional[date] = None
     
     class Config:
         from_attributes = True

@@ -2,7 +2,7 @@
 from datetime import date    
 from todos.models import Todo
 from sqlalchemy.orm import Session
-from todos.schemas import CreateTodoRequest
+from todos.schemas import CreateTodoRequest, UpdateTodoRequest
 
 class TodoRepository:
     def __init__(self, db: Session):
@@ -19,22 +19,25 @@ class TodoRepository:
     # Todo 저장
     def save_todo(self, request: CreateTodoRequest) -> Todo:
         todo = Todo(title=request.title, description=request.description,  priority=request.priority,due_date=date.fromisoformat(request.due_date))                                                                                                                                                                                                                                                                                                                                   
-        self.db.add(todo)       # INSERT 준비
-        self.db.commit()        # DB에 실제로 저장
+        self.db.add(todo)     
+        self.db.commit()
         self.db.refresh(todo)   # id 등 DB 생성 값 갱신
         return todo
 
     # Todo 수정
-    def update_todo(self, todo_id: int, request: CreateTodoRequest) -> Todo | None:
-        todo = self.db.query(Todo).filter(Todo.id == todo_id).first()
+    def update_todo(self, todo_id: int, request: UpdateTodoRequest) -> Todo | None:
+        update_data = self.db.query(Todo).filter(Todo.id == todo_id).first()
+        logger.info(f"request: {update_data}")
+        logger.info(f"request type: {type(update_data)}")
+        
         # sqlalchemy에는 update 메소드가 없음.
-        if todo:
-            for res in request:
-                logger.info(f"update_todo 호출 - todo_id: {todo_id}, request: {res}")
-  
-            self.db.update(todo)
+        if update_data:
+            for key, value in update_data.items():
+                update_data.key = value
+                
             self.db.commit()
-            return todo
+            self.db.refresh(update_data)   # id 등 DB 생성 값 갱신
+            return update_data
     
     # Todo 삭제
     def delete_todo(self, todo_id: int) -> None:
