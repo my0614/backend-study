@@ -1,7 +1,8 @@
 # todos/schemas.py
 from pydantic import BaseModel
-from typing import List  
-    
+from typing import List
+from datetime import date                                                                                                                                                                       
+ 
 class CreateTodoRequest(BaseModel):
     title: str
     description: str

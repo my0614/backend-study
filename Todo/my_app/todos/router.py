@@ -19,3 +19,8 @@ def get_todo(todo_id: int, service: TodoService = Depends(get_todo_service)):
 @router.post("", response_model=CreateTodoResponse,status_code=201)
 def create_todo(request: CreateTodoRequest, service: TodoService = Depends(get_todo_service)):
     return service.create_todo(request)
+
+#DELETE /todos/{todo_id}
+@router.delete("/{todo_id}", status_code=204)
+def delete_todo(todo_id: int, service: TodoService = Depends(get_todo_service)):
+    service.delete_todo(todo_id)

@@ -23,3 +23,7 @@ class TodoService:
     def create_todo(self, request: CreateTodoRequest) -> Todo:
         todo_data = self.repository.save_todo(request)
         return todo_data
+    
+    def delete_todo(self, todo_id: int) -> Todo:
+        status = self.repository.delete_todo(todo_id)
+        return status
