@@ -26,4 +26,5 @@ class TodoService:
     
     def delete_todo(self, todo_id: int) -> Todo:
         status = self.repository.delete_todo(todo_id)
-        return status
+        if status == False:
+            raise HTTPException(status_code=404, detail=f"존재하지 않습니다. id: {todo_id}")
