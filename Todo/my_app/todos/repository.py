@@ -1,6 +1,8 @@
 # todos/repository.py
-from sqlalchemy.orm import Session
+from datetime import date    
 from todos.models import Todo
+from sqlalchemy.orm import Session
+from todos.schemas import CreateTodoRequest
 
 class TodoRepository:
     def __init__(self, db: Session):
@@ -14,8 +16,8 @@ class TodoRepository:
     def get_todo(self, todo_id: int) -> Todo | None:
         return self.db.query(Todo).filter(Todo.id == todo_id).first()
 
-    def save_todo(self, title: str, description: str, priority: str, due_date:str) -> User:
-        todo = Todo(title=ntitleame, description=description,priority=priority,due_date=due_date)
+    def save_todo(self, request: CreateTodoRequest) -> Todo:
+        todo = Todo(title=request.title, description=request.description,  priority=request.priority,due_date=date.fromisoformat(request.due_date))                                                                                                                                                                                                                                                                                                                                   
         self.db.add(todo)       # INSERT 준비
         self.db.commit()        # DB에 실제로 저장
         self.db.refresh(todo)   # id 등 DB 생성 값 갱신
