@@ -19,3 +19,7 @@ class TodoService:
         if todo is None:
             raise HTTPException(status_code=404, detail=f"존재하지 않습니다. id: {todo_id}")
         return todo
+
+    def create_todo(self, request: CreateTodoRequest) -> Todo:
+        todo_data = self.repository.save_todo(request)
+        return todo_data

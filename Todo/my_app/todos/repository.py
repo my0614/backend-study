@@ -14,7 +14,7 @@ class TodoRepository:
     def get_todo(self, todo_id: int) -> Todo | None:
         return self.db.query(Todo).filter(Todo.id == todo_id).first()
 
-    def save(self, title: str, description: str, priority: str, due_date:str) -> User:
+    def save_todo(self, title: str, description: str, priority: str, due_date:str) -> User:
         todo = Todo(title=ntitleame, description=description,priority=priority,due_date=due_date)
         self.db.add(todo)       # INSERT 준비
         self.db.commit()        # DB에 실제로 저장

@@ -16,6 +16,6 @@ def get_todo(todo_id: int, service: TodoService = Depends(get_todo_service)):
     return service.get_todo(todo_id)
 
 #POST /todos
-@router.post("", response_model=CreateTodoResponse)
+@router.post("", response_model=CreateTodoResponse,status_code=201)
 def create_todo(request: CreateTodoRequest, service: TodoService = Depends(get_todo_service)):
     return service.create_todo(request)
