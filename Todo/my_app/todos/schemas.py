@@ -1,6 +1,6 @@
 # todos/schemas.py
 from pydantic import BaseModel
-from typing import List
+from typing import List, Optional
 from datetime import date                                                                                                                                                                       
  
 class CreateTodoRequest(BaseModel):
@@ -9,16 +9,14 @@ class CreateTodoRequest(BaseModel):
     priority: str
     due_date: str
 
-class TodoListRequest(BaseModel):
-    is_completed: bool
-    priority: str
-
 class TodoRequest(BaseModel):
     id: int
 
 class UpdateTodoRequest(BaseModel):
-    is_completed: bool
-    priority: str
+    title: Optional[str] = None
+    description: Optional[str] = None
+    is_completed: Optional[bool] = None
+    priority: Optional[str] = None
 
 class DeleteTodoRequest(BaseModel):
     id: int
@@ -37,6 +35,15 @@ class TodoResponse(BaseModel):
     description: str
     priority: str
     due_date: date
+    
+    class Config:
+        from_attributes = True
+        
+class UpdateTodoResponse(BaseModel):
+    title: Optional[str] = None
+    description: Optional[str] = None
+    is_completed: Optional[bool] = None
+    priority: Optional[str] = None
     
     class Config:
         from_attributes = True

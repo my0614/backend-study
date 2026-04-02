@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends
 from todos.dependencies import get_todo_service
-from todos.schemas import CreateTodoRequest, TodoResponse, CreateTodoResponse
+from todos.schemas import CreateTodoRequest, TodoResponse, CreateTodoResponse, UpdateTodoRequest
 from todos.service import TodoService
 
 router = APIRouter(prefix="/todos", tags=["todos"])
@@ -22,7 +22,7 @@ def create_todo(request: CreateTodoRequest, service: TodoService = Depends(get_t
 
 #PATCH todos/{todo_id}
 @router.patch("/{todo_id}")
-def update_todo(todo_id: int, request: CreateTodoRequest, service: TodoService = Depends(get_todo_service)):
+def update_todo(todo_id: int, request: UpdateTodoRequest, service: TodoService = Depends(get_todo_service)):
     service.update_todo(todo_id, request)
 
 #DELETE /todos/{todo_id}

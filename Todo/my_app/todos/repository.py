@@ -27,7 +27,11 @@ class TodoRepository:
     # Todo 수정
     def update_todo(self, todo_id: int, request: CreateTodoRequest) -> Todo | None:
         todo = self.db.query(Todo).filter(Todo.id == todo_id).first()
+        # sqlalchemy에는 update 메소드가 없음.
         if todo:
+            for res in request:
+                logger.info(f"update_todo 호출 - todo_id: {todo_id}, request: {res}")
+  
             self.db.update(todo)
             self.db.commit()
             return todo

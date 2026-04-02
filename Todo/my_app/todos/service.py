@@ -1,7 +1,10 @@
+import logging
 from fastapi import HTTPException
 from todos.repository import TodoRepository
 from todos.models import Todo
 from todos.schemas import CreateTodoRequest
+
+logger = logging.getLogger(__name__)
 
 class TodoService:
 
@@ -24,10 +27,12 @@ class TodoService:
         todo_data = self.repository.save_todo(request)
         return todo_data
     
-    def update_todo(self, todo_id: int) -> Todo:
-        todo_data = self.repository.update_todo(todo_id)
-        if todo is None:
+    def update_todo(self, todo_id: int, request: CreateTodoRequest) -> Todo:
+        logger.info(f"update_todo 호출 - todo_id: {todo_id}, request: {request}")
+        todo_data = self.repository.update_todo(todo_id, request)
+        if todo_data is None:
             raise HTTPException(status_code=404, detail=f"존재하지 않습니다. id: {todo_id}")
+        return todo_data
         
     def delete_todo(self, todo_id: int) -> Todo:
         status = self.repository.delete_todo(todo_id)
