@@ -1,8 +1,12 @@
 # todos/repository.py
-from datetime import date    
+import logging
+from datetime import date
 from todos.models import Todo
 from sqlalchemy.orm import Session
 from todos.schemas import CreateTodoRequest, UpdateTodoRequest
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 class TodoRepository:
     def __init__(self, db: Session):
@@ -26,18 +30,15 @@ class TodoRepository:
 
     # Todo 수정
     def update_todo(self, todo_id: int, request: UpdateTodoRequest) -> Todo | None:
-        update_data = self.db.query(Todo).filter(Todo.id == todo_id).first()
-        logger.info(f"request: {update_data}")
-        logger.info(f"request type: {type(update_data)}")
-        
-        # sqlalchemy에는 update 메소드가 없음.
-        if update_data:
+        todo_data = self.db.query(Todo).filter(Todo.id == todo_id).first()
+        if todo_data:
+            update_data = request.model_dump(exclude_none=True) # none 값도 필수
             for key, value in update_data.items():
-                update_data.key = value
-                
+                setattr(todo, key, value)
+            
             self.db.commit()
-            self.db.refresh(update_data)   # id 등 DB 생성 값 갱신
-            return update_data
+            self.db.refresh(todo)
+            return todo
     
     # Todo 삭제
     def delete_todo(self, todo_id: int) -> None:
@@ -46,4 +47,5 @@ class TodoRepository:
             self.db.delete(todo)
             self.db.commit()
             return True
+        
         return False
