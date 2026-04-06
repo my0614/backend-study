@@ -40,7 +40,6 @@ class TodoRepository:
         if todo:
             update_data = request.model_dump(exclude_none=True) # True -> none 제외
             for key, value in update_data.items():
-                
                 setattr(todo, key, value)
             
             self.db.commit()

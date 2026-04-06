@@ -51,8 +51,8 @@ def test_get_todo_fail(service, mock_repo):
     mock_repo.get_todo.return_value = None
 
     # When / Then
-    with pytest.raises(HTTPException, match="존재하지 않는 id") as e:
-        service.get_user(999)
+    with pytest.raises(HTTPException, match="존재하지 않습니다. id: 999") as e:
+        service.get_todo(999)
     assert e.value.status_code == 404
 
 def test_get_all_todo_suc(service, mock_repo):
@@ -71,24 +71,25 @@ def test_get_all_todo_suc(service, mock_repo):
     mock_repo.get_todo_list.assert_called_once_with(request)
 
 def test_update_todo_suc(service, mock_repo):
-    mock_repo.update_todo.return_value = TodoItem(title="update test",id=6)
+    mock_repo.update_todo.return_value = TodoItem(title="dfsdfdfsfd", description="CRUD 연습", priority="high",due_date="2026-04-03", id=6)
     request = UpdateTodoRequest(title="update test")
     todo_id = 6
     # When
     result = service.update_todo(todo_id, request)
 
     # Then
-    assert result.title == "update test"
+    assert result.title == "dfsdfdfsfd"
     assert result.id == todo_id
     mock_repo.update_todo.assert_called_once_with(todo_id, request)
     
 def test_update_todo_fail(service, mock_repo):
     # Given
     mock_repo.update_todo.return_value = None
-
+    request = UpdateTodoRequest(title="update test")
+    todo_id=999
     # When / Then
-    with pytest.raises(HTTPException, match="존재하지 않는 id") as e:
-        service.get_user(999)
+    with pytest.raises(HTTPException, match="존재하지 않습니다. id: 999") as e:
+        service.update_todo(todo_id, request)
     assert e.value.status_code == 404
 
 def test_delete_todo_suc(service, mock_repo):
@@ -105,6 +106,33 @@ def test_delete_todo_fail(service, mock_repo):
     mock_repo.delete_todo.return_value = False
 
     # When / Then
-    with pytest.raises(HTTPException, match="존재하지 않는 id") as e:
+    with pytest.raises(HTTPException, match="999") as e:
         service.delete_todo(999)
+    assert e.value.status_code == 404
+    
+def test_duedata_todo_suc(service, mock_repo):
+    todo1 = TodoItem(title="호호잇", description="string", priority="medium", due_date="2026-01-01", id=4)
+    todo2 = TodoItem(title="hello", description="", priority="high", due_date="2026-04-03", id=6)
+    todo3 = TodoItem(title="test_code", description="string", priority="medium", due_date="2026-04-06", id=7)
+    todo4 = TodoItem(title="string", description="string", priority="medium", due_date="2026-04-06", id=8)
+    mock_repo.get_overdue_todo.return_value = [todo1, todo2, todo3, todo4]
+
+    # When
+    result = service.get_overdue_todo()
+
+    # Then
+    assert len(result.todolist) == 4
+    assert result.todolist[0].title == "호호잇"
+    assert result.todolist[1].title == "hello"
+    assert result.todolist[2].title == "test_code"
+    assert result.todolist[3].title == "string"
+    mock_repo.get_overdue_todo.assert_called_once_with()
+    
+def test_duedata_todo_fail(service, mock_repo):
+    # Given
+    mock_repo.get_overdue_todo.return_value = None
+
+    # When / Then
+    with pytest.raises(HTTPException, match="존재하지 않습니다.") as e:
+        service.get_overdue_todo()
     assert e.value.status_code == 404
