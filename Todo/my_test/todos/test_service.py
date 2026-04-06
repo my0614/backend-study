@@ -4,7 +4,7 @@ from datetime import date
 from fastapi import HTTPException
 from my_app.todos.service import *
 from unittest.mock import MagicMock
-from my_app.todos.schemas import TodoItem, TodoListRequest
+from my_app.todos.schemas import TodoItem, TodoListRequest, UpdateTodoRequest
 
 @pytest.fixture
 def mock_repo():
@@ -59,12 +59,11 @@ def test_get_all_todo_suc(service, mock_repo):
     todo1 = TodoItem(title="dfsdfdfsfd", description="CRUD 연습", priority="high",due_date="2026-04-03", id=6)
     todo2 = TodoItem(title="공부", description="FastAPI", priority="high", due_date="2026-04-10", id=1)
     mock_repo.get_todo_list.return_value = [todo1, todo2]
-
     request = TodoListRequest(is_completed=None, priority="high")
+    
     # When
     result = service.get_all_todos(request)
-
-
+    
     # Then
     assert len(result.todolist) == 2           # 리스트 길이 검증
     assert result.todolist[0].title == "dfsdfdfsfd"  # 첫번째 항목
@@ -72,4 +71,14 @@ def test_get_all_todo_suc(service, mock_repo):
     mock_repo.get_todo_list.assert_called_once_with(request)
 
 
+def test_update_todo_suc(service, mock_repo):
+    mock_repo.update_todo.return_value = TodoItem(title="update test",id=6)
+    request = UpdateTodoRequest(title="update test")
+    todo_id = 6
+    # When
+    result = service.update_todo(todo_id, request)
 
+    # Then
+    assert result.title == "update test"
+    assert result.id == todo_id
+    mock_repo.update_todo.assert_called_once_with(todo_id, request)
