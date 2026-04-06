@@ -18,7 +18,7 @@ class TodoItem(OrmBaseModel):
     description: str
     priority: Optional[PriorityEnum] = "medium"
     due_date: date
-    id: int
+    id: Optional[int] = None
      
 class TodoList(OrmBaseModel):
     todolist: list[TodoItem] 
