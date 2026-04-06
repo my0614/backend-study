@@ -70,7 +70,6 @@ def test_get_all_todo_suc(service, mock_repo):
     assert result.todolist[1].title == "공부"   # 두번째 항목
     mock_repo.get_todo_list.assert_called_once_with(request)
 
-
 def test_update_todo_suc(service, mock_repo):
     mock_repo.update_todo.return_value = TodoItem(title="update test",id=6)
     request = UpdateTodoRequest(title="update test")
@@ -82,3 +81,30 @@ def test_update_todo_suc(service, mock_repo):
     assert result.title == "update test"
     assert result.id == todo_id
     mock_repo.update_todo.assert_called_once_with(todo_id, request)
+    
+def test_update_todo_fail(service, mock_repo):
+    # Given
+    mock_repo.update_todo.return_value = None
+
+    # When / Then
+    with pytest.raises(HTTPException, match="존재하지 않는 id") as e:
+        service.get_user(999)
+    assert e.value.status_code == 404
+
+def test_delete_todo_suc(service, mock_repo):
+    mock_repo.delete_todo.return_value = True
+    todo_id = 1
+    # When
+    result = service.delete_todo(todo_id)
+
+    # Then
+    mock_repo.delete_todo.assert_called_once_with(todo_id)
+    
+def test_delete_todo_fail(service, mock_repo):
+    # Given
+    mock_repo.delete_todo.return_value = False
+
+    # When / Then
+    with pytest.raises(HTTPException, match="존재하지 않는 id") as e:
+        service.delete_todo(999)
+    assert e.value.status_code == 404
