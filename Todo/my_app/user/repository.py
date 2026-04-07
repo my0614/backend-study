@@ -16,7 +16,7 @@ class UserRepository:
     def find_by_email(self, email: str) -> User | None:
         return self.db.query(User).filter(User.email==email).first()
     
-    def create_user(self,  request: UserRequest) -> UserReponse:
+    def save_user(self,  request: UserRequest) -> UserReponse:
         user = User(id=request.id, password=request.password, name=request.name, email=request.email)
         self.db.add(user)
         self.db.commit()

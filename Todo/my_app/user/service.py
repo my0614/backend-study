@@ -12,7 +12,10 @@ class UserService:
         self.repository = repository
     
     def create_user(self, request: UserRequest) -> UserReponse:
-        user = self.repository.create_user(request)
+        existing = self.repository.find_by_email(request.email)
+        if existing:
+            raise ValueError("이미 존재하는 이메일")
+        user = self.repository.save_user(request)
         return UserReponse(user)
     
     def get_user(self, id: int) -> UserReponse:
