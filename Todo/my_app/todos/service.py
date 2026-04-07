@@ -1,8 +1,8 @@
 import logging
-from todos.models import Todo
+from my_app.todos.models import Todo
 from fastapi import HTTPException
-from todos.repository import TodoRepository
-from todos.schemas import TodoItem, TodoList, TodoListRequest, UpdateTodoRequest
+from my_app.todos.repository import TodoRepository
+from my_app.todos.schemas import TodoItem, TodoList, TodoListRequest, UpdateTodoRequest
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

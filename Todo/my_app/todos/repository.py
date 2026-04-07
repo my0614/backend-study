@@ -2,9 +2,9 @@
 import logging
 from datetime import date
 from datetime import datetime
-from todos.models import Todo
+from my_app.todos.models import Todo
 from sqlalchemy.orm import Session
-from todos.schemas import UpdateTodoRequest, TodoListRequest, TodoItem, TodoList
+from my_app.todos.schemas import UpdateTodoRequest, TodoListRequest, TodoItem, TodoList
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
