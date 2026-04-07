@@ -61,14 +61,15 @@ def test_get_user_fail(service, mock_repo):
 def test_delete_user_suc(service, mock_repo):
     mock_repo.find_by_id.return_value = True
     user_id = 1
-
+    
     # When
-    service.delete_user(user_id)
+    result = service.delete_user(user_id)
 
     # Then
+    assert result.id == 1
     mock_repo.delete_user.assert_called_once_with(user_id)
-
-def test_delete_user_fail(service, mock_repo):
+    
+def test_delete_todo_fail(service, mock_repo):
     # Given
     mock_repo.delete_user.return_value = False
 
