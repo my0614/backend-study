@@ -57,3 +57,24 @@ def test_get_user_fail(service, mock_repo):
     # When / Then
     with pytest.raises(ValueError, match="존재하지 않습니다. id: 999") as e:
         service.get_user(999)
+
+def test_delete_user_suc(service, mock_repo):
+    mock_repo.find_by_id.return_value = True
+    user_id = 1
+
+    # When
+    service.delete_user(user_id)
+
+    # Then
+    mock_repo.delete_user.assert_called_once_with(user_id)
+
+def test_delete_user_fail(service, mock_repo):
+    # Given
+    mock_repo.delete_user.return_value = False
+
+    # When / Then
+    with pytest.raises(HTTPException, match="999") as e:
+        service.delete_user(999)
+    assert e.value.status_code == 404
+    
+    
