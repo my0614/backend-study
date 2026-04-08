@@ -16,13 +16,13 @@ class UserService:
         if existing:
             raise ValueError("이미 존재하는 이메일")
         user = self.repository.save_user(request)
-        return UserReponse(user)
+        return user
     
     def get_user(self, id: int) -> UserReponse:
         user = self.repository.get_user(id)
         if user is None:
             raise ValueError(f"존재하지 않습니다. id: {id}")
-        return UserReponse(user)
+        return user
         
     def delete_user(self, id: int) -> None:
         user = self.repository.delete_user(id)

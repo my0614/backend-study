@@ -7,4 +7,4 @@ from user.service import UserService
 
 def get_user_service(db: Session = Depends(get_db)) -> UserService:
     repository = UserRepository(db)
-    return UserRepository(repository)
+    return UserService(repository)

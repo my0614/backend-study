@@ -17,7 +17,7 @@ class UserRepository:
         return self.db.query(User).filter(User.email==email).first()
     
     def save_user(self,  request: UserRequest) -> UserReponse:
-        user = User(id=request.id, password=request.password, name=request.name, email=request.email)
+        user = User(password=request.password, name=request.name, email=request.email)
         self.db.add(user)
         self.db.commit()
         self.db.refresh(user)
