@@ -46,7 +46,7 @@ def test_get_user_suc(service, mock_repo):
  
     # Then
     assert result.id == 1
-    mock_repo.get_user.assert_called_once_with(User(id=1))
+    mock_repo.get_user.assert_called_once_with(1)
     
 def test_get_user_fail(service, mock_repo):
     mock_repo.find_by_id.return_value = None
