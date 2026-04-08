@@ -1,8 +1,8 @@
 from fastapi import Query 
 from fastapi import APIRouter, Depends
-from my_app.user.service import UserService
-from my_app.user.dependencies import get_user_service
-from my_app.user.schemas import UserRequest, UserReponse
+from user.service import UserService
+from user.dependencies import get_user_service
+from user.schemas import UserRequest, UserReponse
 
 router = APIRouter(prefix="/user", tags=["user"])
 

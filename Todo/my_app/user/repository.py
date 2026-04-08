@@ -2,9 +2,9 @@
 import logging
 from datetime import date
 from datetime import datetime
-from my_app.user.models import User
+from user.models import User
 from sqlalchemy.orm import Session
-from my_app.user.schemas import *
+from user.schemas import *
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
