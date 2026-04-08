@@ -2,10 +2,10 @@
 import pytest
 from datetime import date
 from fastapi import HTTPException
-from my_app.user.models import User
-from my_app.user.service import *
+from user.models import User
+from user.service import *
 from unittest.mock import MagicMock
-from my_app.user.schemas import *
+from user.schemas import *
 
 @pytest.fixture
 def mock_repo():

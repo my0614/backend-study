@@ -2,9 +2,9 @@
 import pytest
 from datetime import date
 from fastapi import HTTPException
-from my_app.todos.service import *
+from todos.service import *
 from unittest.mock import MagicMock
-from my_app.todos.schemas import TodoItem, TodoListRequest, UpdateTodoRequest
+from todos.schemas import TodoItem, TodoListRequest, UpdateTodoRequest
 
 @pytest.fixture
 def mock_repo():
