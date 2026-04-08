@@ -3,7 +3,7 @@ import pytest
 from datetime import date
 from fastapi import HTTPException
 from user.models import User
-from user.service import *
+from user.service import UserService, UserRequest
 from unittest.mock import MagicMock
 from user.schemas import *
 
@@ -42,7 +42,7 @@ def test_get_user_suc(service, mock_repo):
     mock_repo.get_user.return_value = User(id=1, name="high", email="abcd@naver.com")
     
     # When
-    result = service.get_user(User(id=1))
+    result = service.get_user(1)
  
     # Then
     assert result.id == 1
