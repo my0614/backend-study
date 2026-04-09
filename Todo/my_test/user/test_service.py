@@ -3,9 +3,9 @@ import pytest
 from datetime import date
 from fastapi import HTTPException
 from user.models import User
-from user.service import UserService, UserRequest
+from user.service import UserService
 from unittest.mock import MagicMock
-from user.schemas import *
+from user.schemas import UserRequest
 
 @pytest.fixture
 def mock_repo():
@@ -68,7 +68,7 @@ def test_delete_user_suc(service, mock_repo):
     # Then
     mock_repo.delete_user.assert_called_once_with(user_id)
     
-def test_delete_todo_fail(service, mock_repo):
+def test_delete_user_fail(service, mock_repo):
     # Given
     mock_repo.delete_user.return_value = False
 
