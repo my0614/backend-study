@@ -9,7 +9,7 @@ router = APIRouter(prefix="/user", tags=["user"])
 
 # POST
 @router.post("", response_model=UserReponse)
-def create_user(request: UserRequest, service: UserService = Depends(get_user_service), token: HTTPAuthorizationCredentials = Depends(security)):
+def create_user(request: UserRequest, service: UserService = Depends(get_user_service)):
     return service.create_user(request)
 
 # GET

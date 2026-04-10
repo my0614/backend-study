@@ -8,5 +8,5 @@ class User(Base):
     password = Column(String, nullable=False)
     name = Column(String, nullable=False)
     email = Column(String, nullable=False)
-    created_at = Column(DateTime, default=datetime.now())
+    created_at = Column(DateTime, default=datetime.now)
     

@@ -1,11 +1,12 @@
 # todos/repository.py
 import logging
 from datetime import date
+from user.schemas import *
 from datetime import datetime
 from user.models import User
+from fastapi import HTTPException
 from sqlalchemy.orm import Session
-from user.schemas import *
-from user.auth import hash_password, verify_password
+from core.security import hash_password, verify_password
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -34,7 +35,7 @@ class UserRepository:
     
     def save_user(self,  request: UserRequest) -> UserReponse:
         if self.is_password_used(request.password):
-            raise ValueError("이미 사용중인 비밀번호입니다.")
+            raise HTTPException(status_code=409, detail="이미 사용중인 비밀번호입니다.")
         hashed = hash_password(request.password)
         user = User(password=hashed, name=request.name, email=request.email)
         self.db.add(user)

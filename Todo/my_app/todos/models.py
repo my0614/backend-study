@@ -5,7 +5,7 @@ from datetime import datetime
 class Todo(Base):
     __tablename__ = "todos"  # DB 테이블 이름
     id = Column(Integer, primary_key=True, index=True)
-    user_id = Column(String, ForeignKey("User.id"),nullable=False)
+    user_id = Column(Integer, ForeignKey("user.id"),nullable=False)
     title = Column(String, nullable=False)
     description = Column(String)
     is_completed = Column(Boolean, default=False)
