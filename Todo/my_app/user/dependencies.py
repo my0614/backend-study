@@ -1,7 +1,7 @@
 # todos/dependencies.py
 from fastapi import Depends
 from sqlalchemy.orm import Session
-from my_app.core.database import get_db
+from core.database import get_db
 from user.service import UserService
 from user.repository import UserRepository
 from fastapi.security import HTTPBearer

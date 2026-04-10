@@ -38,7 +38,7 @@ class TodoRepository:
     def update_todo(self, todo_id: int, request: UpdateTodoRequest) -> Todo | None:
         todo = self.db.query(Todo).filter(Todo.user_id == request.user_id, Todo.id == todo_id).first()
         if todo:
-            update_data = request.model_dump(exclude_none=True) # True -> none 제외
+            update_data = request.model_dump(exclude_none=True, exclude={"user_id"})
             for key, value in update_data.items():
                 setattr(todo, key, value)
             

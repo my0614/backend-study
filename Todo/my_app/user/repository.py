@@ -1,6 +1,5 @@
 # todos/repository.py
 import logging
-from datetime import date
 from user.schemas import *
 from datetime import datetime
 from user.models import User
@@ -15,11 +14,11 @@ class UserRepository:
     def __init__(self, db: Session):
         self.db = db
     
-    def authenticate_user(db: Session, email: str, password: str) -> User | None:
-        user = db.query(User).filter(User.email == email).first()
+    def authenticate_user(self, email: str, password: str) -> User | None:
+        user = self.db.query(User).filter(User.email == email).first()
         if not user:
             return None
-        if not verify_password(password, user.hashed_password):
+        if not verify_password(password, user.password):
             return None
         return user
 
