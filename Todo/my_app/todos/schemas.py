@@ -25,12 +25,12 @@ class TodoList(OrmBaseModel):
     todolist: list[TodoItem] 
     
 class TodoListRequest(OrmBaseModel):
-    user_id: int
+    user_id: Optional[int] = None
     is_completed: Optional[bool] = None
     priority: Optional[PriorityEnum] = None
 
 class UpdateTodoRequest(OrmBaseModel):
-    user_id: int
+    user_id: Optional[int] = None
     title: Optional[str] = None
     description: Optional[str] = None
     is_completed: Optional[bool] = None
