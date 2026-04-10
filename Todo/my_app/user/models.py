@@ -1,5 +1,5 @@
 from sqlalchemy import Column, Integer, String, DateTime 
-from my_app.core.database import Base
+from core.database import Base
 from datetime import datetime
 
 class User(Base):

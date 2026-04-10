@@ -22,12 +22,9 @@ class UserRepository:
             return None
         return user
 
-    def is_password_used(self, password: str) -> bool:                                                         
-        users = self.db.query(User).all()                                                                      
-        for user in users:                                                                                     
-            if verify_password(password, user.password):
-                return True                                                                                    
-        return False    
+    def is_password_used(self, password: str) -> bool:
+        hashed_passwords = self.db.query(User.password).all()
+        return any(verify_password(password, row.password) for row in hashed_passwords)    
     
     def find_by_email(self, email: str) -> User | None:
         return self.db.query(User).filter(User.email==email).first()

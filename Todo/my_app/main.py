@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from my_app.core.database import engine, Base
+from core.database import engine, Base
 import todos.models
 import user.models  # 모델을 임포트해야 Base가 인식한다
 from user.router import router as user_router
