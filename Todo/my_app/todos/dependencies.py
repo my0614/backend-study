@@ -1,7 +1,7 @@
 # todos/dependencies.py
 from fastapi import Depends
 from sqlalchemy.orm import Session
-from database import get_db
+from my_app.core.database import get_db
 from todos.repository import TodoRepository
 from todos.service import TodoService
 
