@@ -14,7 +14,8 @@ class OrmBaseModel(BaseModel):
         from_attributes = True
         
 class TodoItem(OrmBaseModel):
-    title: str
+    user_id: int
+    title: str 
     description: str
     priority: Optional[PriorityEnum] = "medium"
     due_date: date
@@ -24,10 +25,12 @@ class TodoList(OrmBaseModel):
     todolist: list[TodoItem] 
     
 class TodoListRequest(OrmBaseModel):
+    user_id: int
     is_completed: Optional[bool] = None
     priority: Optional[PriorityEnum] = None
 
 class UpdateTodoRequest(OrmBaseModel):
+    user_id: int
     title: Optional[str] = None
     description: Optional[str] = None
     is_completed: Optional[bool] = None
