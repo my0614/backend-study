@@ -1,11 +1,11 @@
 # todos/repository.py
-import bcrypt
 import logging
 from datetime import date
 from datetime import datetime
 from user.models import User
 from sqlalchemy.orm import Session
 from user.schemas import *
+from auth import hash_password, verify_password
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -17,7 +17,7 @@ class UserRepository:
     def is_password_used(self, password: str) -> bool:                                                         
         users = self.db.query(User).all()                                                                      
         for user in users:                                                                                     
-            if bcrypt.checkpw(password.encode('utf-8'), user.password):
+            if verify_password(password, user.password):
                 return True                                                                                    
         return False    
       
@@ -27,7 +27,7 @@ class UserRepository:
     def save_user(self,  request: UserRequest) -> UserReponse:
         if self.is_password_used(request.password):
             raise ValueError("이미 사용중인 비밀번호입니다.")
-        hashed = bcrypt.hashpw(request.password.encode('utf-8'), bcrypt.gensalt()) 
+        hashed = hash_password(request.password)
         user = User(password=hashed, name=request.name, email=request.email)
         self.db.add(user)
         self.db.commit()
