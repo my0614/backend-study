@@ -15,7 +15,7 @@ class TodoRepository:
 
     # Todo 목록 조회
     def get_todo_list(self, request: TodoListRequest) -> TodoList:                                                                                                                   
-      query = self.db.query(Todo)                                                        
+      query = self.db.query(Todo).filter(Todo.user_id == request.user_id)                                                     
       if request.is_completed is not None:
           query = query.filter(Todo.is_completed == request.is_completed)                                                                                                                                    
       if request.priority is not None:                                   
@@ -23,12 +23,12 @@ class TodoRepository:
       return query.order_by(Todo.due_date).all() 
 
     # Todo 단건 조회
-    def get_todo(self, todo_id: int) -> Todo | None:
-        return self.db.query(Todo).filter(Todo.id == todo_id).first()
+    def get_todo(self, todo_id: int, user_id: int) -> Todo | None:
+        return self.db.query(Todo).filter(Todo.user_id == user_id, Todo.id == todo_id).first()
 
     # Todo 저장
     def save_todo(self, request: TodoItem) -> Todo:
-        todo = Todo(title=request.title, description=request.description, priority=request.priority, due_date=request.due_date)                                                                                                                                                                                                                                                                                                                                   
+        todo = Todo(user_id=request.user_id, title=request.title, description=request.description, priority=request.priority, due_date=request.due_date)                                                                                                                                                                                                                                                                                                                                   
         self.db.add(todo)     
         self.db.commit()
         self.db.refresh(todo) # id 등 DB 생성 값 갱신
@@ -36,11 +36,10 @@ class TodoRepository:
 
     # Todo 수정
     def update_todo(self, todo_id: int, request: UpdateTodoRequest) -> Todo | None:
-        todo = self.db.query(Todo).filter(Todo.id == todo_id).first()
+        todo = self.db.query(Todo).filter(Todo.user_id == request.user_id, Todo.id == todo_id).first()
         if todo:
-            update_data = request.model_dump(exclude_none=True) # True -> none 제외
+            update_data = request.model_dump(exclude_none=True, exclude={"user_id"})
             for key, value in update_data.items():
-                
                 setattr(todo, key, value)
             
             self.db.commit()
@@ -48,8 +47,8 @@ class TodoRepository:
             return todo
     
     # Todo 삭제
-    def delete_todo(self, todo_id: int) -> bool:
-        todo = self.db.query(Todo).filter(Todo.id == todo_id).first()
+    def delete_todo(self, todo_id: int, user_id: int) -> bool:
+        todo = self.db.query(Todo).filter(Todo.user_id == user_id, Todo.id == todo_id).first()
         if todo:
             self.db.delete(todo)
             self.db.commit()
@@ -58,6 +57,6 @@ class TodoRepository:
         return False
     
     # Overdue Todo 목록 조회
-    def get_overdue_todo(self) -> TodoList:                                                                                                                   
-        query = self.db.query(Todo).filter(Todo.is_completed == False, Todo.due_date < datetime.now())                                                                                                                                                                                                            
+    def get_overdue_todo(self, user_id: int) -> TodoList:                                                                                                                   
+        query = self.db.query(Todo).filter(Todo.user_id == user_id, Todo.is_completed == False, Todo.due_date < datetime.now())                                                                                                                                                                                                            
         return query.order_by(Todo.due_date).all() 
