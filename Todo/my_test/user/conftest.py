@@ -12,7 +12,6 @@ TEST_DATABASE_URL = "sqlite:///./test.db"
 engine = create_engine(TEST_DATABASE_URL, connect_args={"check_same_thread": False})
 TestingSessionLocal = sessionmaker(bind=engine)
 
-
 @pytest.fixture(autouse=True)
 def setup_db():
     """각 테스트 전에 테이블 생성, 후에 삭제"""

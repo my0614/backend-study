@@ -1,6 +1,5 @@
 import pytest
 
-
 def get_token(client, email, password):
     response = client.post("/auth/login", json={"email": email, "password": password})
     return response.json()["access_token"]
