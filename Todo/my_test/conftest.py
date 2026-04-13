@@ -1,15 +1,20 @@
-# tests/conftest.py  ← pytest가 자동으로 읽는 설정 파일
+# tests/conftest.py
+import os
+import sys
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "../my_app"))
+
 import pytest
-from fastapi.testclient import TestClient
-from sqlalchemy import create_engine
+from main import app
+from core.database import Base, get_db
+from sqlalchemy.pool import StaticPool
 from sqlalchemy.orm import sessionmaker
-from my_app.main import app
-from my_app.core.database import Base, get_db
+from sqlalchemy import create_engine
+from fastapi.testclient import TestClient
 
 # 테스트용 인메모리 SQLite DB
-TEST_DATABASE_URL = "sqlite:///./test.db"
+TEST_DATABASE_URL = "sqlite://"
 
-engine = create_engine(TEST_DATABASE_URL, connect_args={"check_same_thread": False})
+engine = create_engine(TEST_DATABASE_URL, connect_args={"check_same_thread": False}, poolclass=StaticPool)
 TestingSessionLocal = sessionmaker(bind=engine)
 
 @pytest.fixture(autouse=True)
