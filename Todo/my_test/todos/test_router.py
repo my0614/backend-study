@@ -49,7 +49,7 @@ def test_get_todo_list(client):
     response = client.get("/todos", headers=headers)
 
     assert response.status_code == 200
-    assert len(response.json()["todolist"]) >= 1
+    assert len(response.json()["todolist"]) == 1
 
 
 def test_update_todo(client):
