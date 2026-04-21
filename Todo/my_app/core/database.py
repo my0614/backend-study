@@ -5,9 +5,9 @@ from sqlalchemy.orm import sessionmaker, DeclarativeBase
 from core.config import get_settings
 
 settings = get_settings()
-engine = create_engine( settings.database_url, # 하드코딩 제거 pool_size=5,
-max_overflow=10,
-pool_recycle=1800, pool_pre_ping=True,
+engine = create_engine(
+    settings.database_url,
+    connect_args={"check_same_thread": False},
 )
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
