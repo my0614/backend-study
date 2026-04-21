@@ -10,11 +10,15 @@ from sqlalchemy.pool import StaticPool
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine
 from fastapi.testclient import TestClient
+from core.config import get_settings, Settings
 
-# 테스트용 인메모리 SQLite DB
-TEST_DATABASE_URL = "sqlite://"
+def get_test_settings():
+      return Settings(
+          database_url="sqlite://",
+          secret_key="test-secret-key-for-testing-only",
+      )
 
-engine = create_engine(TEST_DATABASE_URL, connect_args={"check_same_thread": False}, poolclass=StaticPool)
+engine = create_engine(get_test_settings().database_url, connect_args={"check_same_thread": False}, poolclass=StaticPool)
 TestingSessionLocal = sessionmaker(bind=engine)
 
 @pytest.fixture(autouse=True)
