@@ -1,21 +1,21 @@
-from typing import Generator
+# app/core/database.py
+
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker, declarative_base, Session
+from sqlalchemy.orm import sessionmaker, DeclarativeBase
+from core.config import get_settings
 
-# SQLite 파일로 저장 (todos.db 파일 생성됨)
-DATABASE_URL = "sqlite:///./todos.db"
-
+settings = get_settings()
 engine = create_engine(
-    DATABASE_URL,
-    connect_args={"check_same_thread": False}  # SQLite 전용 옵션
+    settings.database_url,
+    connect_args={"check_same_thread": False},
 )
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-Base = declarative_base()
-
-def get_db() -> Generator[Session, None, None]:
+class Base(DeclarativeBase):
+    pass
+def get_db():
     db = SessionLocal()
     try:
-        yield db         # 이 지점에서 라우터 함수가 실행됨
+        yield db
     finally:
-        db.close()       # 요청이 끝나면 항상 세션 닫기
+        db.close()
