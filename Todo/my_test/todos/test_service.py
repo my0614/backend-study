@@ -1,7 +1,6 @@
 # my_test/todos/test_service.py
 import pytest
 from datetime import date
-from fastapi import HTTPException
 from core.exceptions import NotFoundException
 from todos.service import *
 from unittest.mock import MagicMock
@@ -150,7 +149,7 @@ def test_get_todo_wrong_user(service, mock_repo):
     mock_repo.get_todo.return_value = None
 
     # When / Then
-    with pytest.raises(HTTPException) as e:
+    with pytest.raises(NotFoundException) as e:
         service.get_todo(1, user_id=999)
     assert e.value.status_code == 404
     mock_repo.get_todo.assert_called_once_with(1, 999)
@@ -161,7 +160,7 @@ def test_update_todo_wrong_user(service, mock_repo):
     request = UpdateTodoRequest(user_id=999, title="update test")
 
     # When / Then
-    with pytest.raises(HTTPException) as e:
+    with pytest.raises(NotFoundException) as e:
         service.update_todo(1, request)
     assert e.value.status_code == 404
     mock_repo.update_todo.assert_called_once_with(1, request)
@@ -171,7 +170,7 @@ def test_delete_todo_wrong_user(service, mock_repo):
     mock_repo.delete_todo.return_value = False
 
     # When / Then
-    with pytest.raises(HTTPException) as e:
+    with pytest.raises(NotFoundException) as e:
         service.delete_todo(1, user_id=999)
     assert e.value.status_code == 404
     mock_repo.delete_todo.assert_called_once_with(1, 999)

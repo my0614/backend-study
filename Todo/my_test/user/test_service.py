@@ -1,8 +1,7 @@
 # my_test/todos/test_service.py
 import pytest
 from datetime import date
-from fastapi import HTTPException
-from core.exceptions import NotFoundException
+from core.exceptions import NotFoundException, ConflictException
 from user.models import User
 from user.service import UserService
 from unittest.mock import MagicMock
@@ -35,12 +34,12 @@ def test_creat_user_fail(service, mock_repo):
     request = UserRequest(id=1, password="abcd1234", name="high", email="abcd@naver.com")
 
     # When / Then
-    with pytest.raises(HTTPException) as e:
+    with pytest.raises(ConflictException) as e:
         service.create_user(request)
     assert e.value.status_code == 409
+    assert e.value.message == "이미 존재하는 이메일"
 
 def test_get_user_suc(service, mock_repo):
-    mock_repo.find_by_id.return_value = User(id=1, name="high", email="abcd@naver.com")
     mock_repo.get_user.return_value = User(id=1, name="high", email="abcd@naver.com")
 
     # When
@@ -57,12 +56,13 @@ def test_get_user_fail(service, mock_repo):
     request = UserRequest(id=1, password="abcd1234", name="high", email="abcd@naver.com")
 
     # When / Then
-    with pytest.raises(HTTPException) as e:
+    with pytest.raises(NotFoundException) as e:
         service.get_user(999)
     assert e.value.status_code == 404
+    assert e.value.message == "존재하지 않습니다. id: 999"
 
 def test_delete_user_suc(service, mock_repo):
-    mock_repo.find_by_id.return_value = True
+    mock_repo.delete_user.return_value = True
     user_id = 1
 
     # When
