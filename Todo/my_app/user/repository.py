@@ -1,7 +1,6 @@
 # todos/repository.py
 import logging
 from user.schemas import *
-from datetime import datetime
 from user.models import User
 from sqlalchemy.orm import Session
 from core.exceptions import ConflictException
