@@ -1,8 +1,8 @@
 import logging
-from user.models import User
-from fastapi import HTTPException
-from user.repository import *
 from user.schemas import *
+from user.models import User
+from user.repository import *
+from core.exceptions import *
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -14,17 +14,17 @@ class UserService:
     def create_user(self, request: UserRequest) -> UserReponse:
         existing = self.repository.find_by_email(request.email)
         if existing:
-            raise HTTPException(status_code=409, detail="이미 존재하는 이메일")
+            raise ConflictException(message="이미 존재하는 이메일")
         user = self.repository.save_user(request)
         return user
     
     def get_user(self, id: int) -> UserReponse:
         user = self.repository.get_user(id)
         if user is None:
-            raise HTTPException(status_code=404, detail=f"존재하지 않습니다. id: {id}")
+            raise NotFoundException(message=f"존재하지 않습니다. id: {id}")
         return user
         
     def delete_user(self, id: int) -> None:
         user = self.repository.delete_user(id)
         if user == False:
-            raise HTTPException(status_code=404, detail=f"존재하지 않습니다. id: {id}")
+            raise NotFoundException(message=f"존재하지 않습니다. id: {id}")

@@ -1,6 +1,6 @@
 import logging
+from core.exceptions import *
 from todos.models import Todo
-from fastapi import HTTPException
 from todos.repository import TodoRepository
 from todos.schemas import TodoItem, TodoList, TodoListRequest, UpdateTodoRequest
 
@@ -19,7 +19,7 @@ class TodoService:
     def get_todo(self, todo_id: int, user_id: int) -> TodoItem:
         todo = self.repository.get_todo(todo_id, user_id)
         if todo is None:
-            raise HTTPException(status_code=404, detail=f"존재하지 않습니다. id: {todo_id}")
+            raise NotFoundException(message=f"존재하지 않습니다. id: {todo_id}")
         return todo
 
     def create_todo(self, request: TodoItem) -> TodoItem:
@@ -29,16 +29,16 @@ class TodoService:
     def update_todo(self, todo_id: int, request: UpdateTodoRequest) -> TodoItem:
         todo = self.repository.update_todo(todo_id, request)
         if todo is None:
-            raise HTTPException(status_code=404, detail=f"존재하지 않습니다. id: {todo_id}")
+            raise NotFoundException(message=f"존재하지 않습니다. id: {todo_id}")
         return todo
         
     def delete_todo(self, todo_id: int, user_id: int) -> None:
         status = self.repository.delete_todo(todo_id, user_id)
         if status == False:
-            raise HTTPException(status_code=404, detail=f"{todo_id}")
+            raise NotFoundException(message=f"존재하지 않습니다. id: {todo_id}")
     
     def get_overdue_todo(self, user_id: int) -> TodoList:
         todo = self.repository.get_overdue_todo(user_id)
         if todo is None:
-            raise HTTPException(status_code=404, detail=f"존재하지 않습니다.")
+            raise NotFoundException(message=f"데이터가 존재하지 않습니다.")
         return TodoList(todolist=todo)
