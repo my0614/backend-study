@@ -1,7 +1,7 @@
 # dependencies.py
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from fastapi import Depends
-from core.security import decode_token
+from core.jwt import decode_token
 
 security = HTTPBearer()
 

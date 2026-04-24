@@ -5,6 +5,7 @@ from core.database import engine, Base
 from core.exceptions import AppException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.exceptions import RequestValidationError
+from core.middleware import logging_middleware
 from core.exception_handlers import (
     app_exception_handler,
     validation_exception_handler,
@@ -17,6 +18,8 @@ from auth.router import router as auth_router
 
 Base.metadata.create_all(bind=engine)
 app = FastAPI()
+
+app.middleware("http")(logging_middleware)
 
 app.add_middleware(
       CORSMiddleware,

@@ -3,7 +3,7 @@ import bcrypt
 from jose import jwt, JWTError
 from fastapi import HTTPException
 from datetime import datetime, timedelta, timezone
-from core.config import SECRET_KEY, ALGORITHM, ACCESS_TOKEN_EXPIRE_MINUTES
+from core.config import get_settings
 
 def hash_password(plain: str) -> str:
     return bcrypt.hashpw(plain.encode("utf-8"), bcrypt.gensalt()).decode("utf-8")

@@ -3,7 +3,7 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from core.database import get_db
 from auth.service import authenticate_user
-from core.security import create_access_token
+from core.jwt import create_access_token
 from core.exceptions import UnauthorizedException
 from auth.schemas import LoginRequest, TokenResponse
 

@@ -2,6 +2,7 @@
 import pytest
 from datetime import date
 from fastapi import HTTPException
+from core.exceptions import NotFoundException
 from todos.service import *
 from unittest.mock import MagicMock
 from todos.schemas import TodoItem, TodoListRequest, UpdateTodoRequest
@@ -51,9 +52,10 @@ def test_get_todo_fail(service, mock_repo):
     mock_repo.get_todo.return_value = None
 
     # When / Then
-    with pytest.raises(HTTPException, match="존재하지 않습니다. id: 999") as e:
+    with pytest.raises(NotFoundException) as e:
         service.get_todo(999, 1)
     assert e.value.status_code == 404
+    assert e.value.message == "존재하지 않습니다. id: 999"
 
 def test_get_all_todo_suc(service, mock_repo):
     todo1 = TodoItem(user_id=1, title="dfsdfdfsfd", description="CRUD 연습", priority="high", due_date="2026-04-03", id=6)
@@ -88,9 +90,10 @@ def test_update_todo_fail(service, mock_repo):
     request = UpdateTodoRequest(title="update test")
     todo_id = 999
     # When / Then
-    with pytest.raises(HTTPException, match="존재하지 않습니다. id: 999") as e:
+    with pytest.raises(NotFoundException) as e:
         service.update_todo(todo_id, request)
     assert e.value.status_code == 404
+    assert e.value.message == "존재하지 않습니다. id: 999"
 
 def test_delete_todo_suc(service, mock_repo):
     mock_repo.delete_todo.return_value = True
@@ -107,9 +110,10 @@ def test_delete_todo_fail(service, mock_repo):
     mock_repo.delete_todo.return_value = False
 
     # When / Then
-    with pytest.raises(HTTPException, match="999") as e:
+    with pytest.raises(NotFoundException) as e:
         service.delete_todo(999, 1)
     assert e.value.status_code == 404
+    assert e.value.message == "존재하지 않습니다. id: 999"
 
 def test_duedata_todo_suc(service, mock_repo):
     todo1 = TodoItem(user_id=1, title="호호잇", description="string", priority="medium", due_date="2026-01-01", id=4)
@@ -135,9 +139,10 @@ def test_duedata_todo_fail(service, mock_repo):
     mock_repo.get_overdue_todo.return_value = None
 
     # When / Then
-    with pytest.raises(HTTPException, match="존재하지 않습니다.") as e:
+    with pytest.raises(NotFoundException) as e:
         service.get_overdue_todo(1)
     assert e.value.status_code == 404
+    assert e.value.message == "데이터가 존재하지 않습니다."
 
 # user_id 체크 테스트
 def test_get_todo_wrong_user(service, mock_repo):

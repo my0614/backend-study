@@ -2,6 +2,7 @@
 import pytest
 from datetime import date
 from fastapi import HTTPException
+from core.exceptions import NotFoundException
 from user.models import User
 from user.service import UserService
 from unittest.mock import MagicMock
@@ -75,6 +76,7 @@ def test_delete_user_fail(service, mock_repo):
     mock_repo.delete_user.return_value = False
 
     # When / Then
-    with pytest.raises(HTTPException, match="999") as e:
+    with pytest.raises(NotFoundException) as e:
         service.delete_user(999)
     assert e.value.status_code == 404
+    assert e.value.message == "존재하지 않습니다. id: 999"
