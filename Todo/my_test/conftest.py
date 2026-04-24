@@ -10,7 +10,7 @@ from sqlalchemy.pool import StaticPool
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine
 from fastapi.testclient import TestClient
-from core.config import get_settings, Settings
+from core.config import Settings
 
 def get_test_settings():
       return Settings(
