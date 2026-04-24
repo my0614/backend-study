@@ -14,7 +14,7 @@ def get_all_todo(user_id: int = Depends(get_current_user_id), request: TodoListR
     return service.get_all_todos(request)
 
 #GET /todos/overdue
-@router.get("/overdue")
+@router.get("/overdue", response_model=TodoList)
 def overdue_todo(user_id: int = Depends(get_current_user_id), service: TodoService = Depends(get_todo_service)):
     return service.get_overdue_todo(user_id)
     

@@ -1,8 +1,8 @@
 # app/core/jwt.py
 from datetime import datetime, timedelta
 from jose import jwt, JWTError
-from fastapi import HTTPException
 from core.config import get_settings
+from core.exceptions import UnauthorizedException
 
 def create_access_token(user_id: int) -> str:
     settings = get_settings()
@@ -19,4 +19,4 @@ def decode_token(token: str) -> int:
               token, settings.secret_key, algorithms=[settings.algorithm])
           return int(payload["sub"])
       except JWTError:
-          raise HTTPException(status_code=401,detail="유효하지 않은 토큰")
+          raise UnauthorizedException(message="유효하지 않은 토큰")
