@@ -1,4 +1,4 @@
-from sqlalchemy import Column, ForeignKey, Integer, String, Boolean, Date, DateTime 
+from sqlalchemy import Column, ForeignKey, Integer, String, Boolean, Date, DateTime, Index
 from core.database import Base
 from datetime import datetime
 
@@ -12,3 +12,5 @@ class Todo(Base):
     priority = Column(String, default='medium')
     due_date = Column(Date, nullable=True)
     created_at = Column(DateTime, default=datetime.now)
+    
+    __table_args__ = (Index("get_overdue", "user_id", "is_completed", "due_date"),)        
